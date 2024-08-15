@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript</title>
+    <style>
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: #f5f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .quiz-container {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 420px;
+            text-align: left;
+            animation: slideIn 0.8s ease-in-out;
+        }
+
+        .quiz-container h1 {
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 26px;
+            text-align: center;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .quiz-container h3 {
+            color: #555;
+            font-size: 19px;
+            margin-bottom: 20px;
+        }
+
+        .quiz-container ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .quiz-container li {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .quiz-container li:hover {
+            background-color: #f1f1f1;
+        }
+
+        .quiz-container input[type="radio"] {
+            margin-right: 12px;
+            vertical-align: middle;
+        }
+
+        button {
+            padding: 14px 20px;
+            margin-top: 30px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            width: 100%;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #results {
+            margin-top: 30px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>JavaScript</h1>
+        <div id="quiz"></div>
+        <button id="submit">Submit Answers</button>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "What is the value of `3 + 2 * 2`?",
+                options: ["10", "7", "8", "12"],
+                answer: "7"
+            },
+            {
+                question: "What will be the output of `typeof NaN`?",
+                options: ["number", "string", "undefined", "NaN"],
+                answer: "number"
+            },
+            {
+                question: "What is the result of `5 > 4 && 2 < 1`?",
+                options: ["true", "false", "undefined", "null"],
+                answer: "false"
+            },
+            {
+                question: "What is the result of `'5' - 2`?",
+                options: ["3", "52", "NaN", "Error"],
+                answer: "3"
+            },
+            {
+                question: "What will be the output of `null + 1`?",
+                options: ["1", "null1", "NaN", "Error"],
+                answer: "1"
+            },
+            {
+                question: "What will be the result of `typeof undefined`?",
+                options: ["object", "undefined", "null", "function"],
+                answer: "undefined"
+            },
+        ];
+
+        function loadQuiz() {
+            const quizContainer = document.getElementById('quiz');
+            quizData.forEach((q, index) => {
+                const questionElement = document.createElement('div');
+                questionElement.classList.add('question');
+                questionElement.innerHTML = `
+                    <h3>${q.question}</h3>
+                    <ul>
+                        ${q.options.map((option, i) => `
+                            <li>
+                                <input type="radio" name="question${index}" value="${option}" id="q${index}o${i}">
+                                <label for="q${index}o${i}">${option}</label>
+                            </li>
+                        `).join('')}
+                    </ul>
+                `;
+                quizContainer.appendChild(questionElement);
+            });
+        }
+
+        function calculateScore() {
+            let score = 0;
+            quizData.forEach((q, index) => {
+                const selectedOption = document.querySelector(`input[name="question${index}"]:checked`);
+                if (selectedOption && selectedOption.value === q.answer) {
+                    score++;
+                }
+            });
+            return score;
+        }
+
+        function displayResults() {
+            const score = calculateScore();
+            const resultsContainer = document.getElementById('results');
+            resultsContainer.textContent = `You scored ${score} out of ${quizData.length}`;
+        }
+
+        document.getElementById('submit').addEventListener('click', displayResults);
+
+        window.onload = loadQuiz;
+    </script>
+</body>
+</html>
